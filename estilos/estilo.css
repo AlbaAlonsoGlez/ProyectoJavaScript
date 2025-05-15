@@ -61,10 +61,9 @@ button[onclick="reiniciarVotos()"]:hover {
 }
 
 .ganadora {
-  background-color: #2a9d8f !important;
-  color: white !important;
-  border-color: #21867a !important;
+  background-color: #2a9d8f;
+  color: white;
+  border-color: #21867a;
   font-weight: bold;
-  transform: scale(1.02);
   box-shadow: 0 0 10px rgba(42, 157, 143, 0.4);
 }
