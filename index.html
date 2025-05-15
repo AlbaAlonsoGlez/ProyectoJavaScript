@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Votación The Cure</title>
+  <link rel="stylesheet" type="text/css"  href="estilos/estilo.css">
+</head>
+<body>
+     <section>
+          <h1>Vota la canción más icónica de The Cure =)</h1>
+
+          <div class="bloque">
+          <button class="cancion" id="boton1">Friday I'm In Love</button>
+          <p id="votosFriday"></p>
+          </div>
+
+          <div class="bloque">
+          <button class="cancion" id="boton2">Just like Heaven</button>
+          <p id="votosHeaven"></p>
+          </div>
+
+          <div class="bloque">
+          <button class="cancion" id="boton3">Boys Don't Cry</button>
+          <p id="votosBoys"></p>
+          </div>
+
+          <button onclick="reiniciarVotos()">Reiniciar votación</button>
+     </section>
+     
+
+     <script>
+     //Declaro la variable de las opciones a votar como un array. Escojo una variable de tipo const porque no voy a volver a reaignarle un valor diferente al inicial.
+     const canciones = [
+          "Friday I'm In Love", 
+               "Just like Heaven", 
+          "Boys Don't Cry"
+     ];
+
+     //Declaro una variable let de votos y otra de votos guardados. En este caso los votos serán let porque sí cambiarán de valor.
+     let votos;
+     let votosGuardados = localStorage.getItem("votosCanciones");
+     
+     //Hago un condicional para ver si hay votos guardados y recuperarlos si existen. En caso de que no haya, se empieza con los votos inicializados en 0.
+     if (votosGuardados) {
+          votos = JSON.parse(votosGuardados);
+     } else {
+          votos = {
+          "Friday I'm In Love": 0,
+          "Just like Heaven": 0,
+          "Boys Don't Cry": 0
+          };
+     }
+
+     //Declaro dos const que me permita acceder a los botones
+     const botones = {
+          "Friday I'm In Love": document.getElementById("boton1"),
+          "Just like Heaven": document.getElementById("boton2"),
+          "Boys Don't Cry": document.getElementById("boton3")
+     };
+
+     const textos = {
+          "Friday I'm In Love": document.getElementById("votosFriday"),
+          "Just like Heaven": document.getElementById("votosHeaven"),
+          "Boys Don't Cry": document.getElementById("votosBoys")
+     };
+     
+     canciones.forEach(cancion => {
+          botones[cancion].addEventListener("click", () => votar(cancion));
+     });
+
+     //Esta función aumenta los votos de cada canción, para después guardar la información y actualizarla
+     function votar(cancion) {
+          votos[cancion]++;
+          guardarYActualizar();
+     }
+
+     //Esta función guarda los datos con localStorage
+     function guardarYActualizar() {
+          localStorage.setItem("votosCanciones", JSON.stringify(votos));
+          actualizarVista();
+     }
+
+     //Obtiene cuál/cuáles son las canciones con más votos para poder resaltarla/s.
+     function obtenerGanadora() {
+          const valores = Object.values(votos); //Con esta variable obtengo el número de votos.
+          const maxVotos = Math.max(...valores); //Con esta variable obtengo el número máximo de "valores".
+
+          //Si no hay votos, y por tanto no hay valor máximo, la función no devuelve nada.
+          if (maxVotos === 0) {
+               return [];
+          }
+
+          const nombres = Object.keys(votos); //Obtiene el nombre de las canciones votadas
+          const ganadoras = nombres.filter(nombre => votos[nombre] === maxVotos); //Filtra la lista anterior según las canciones que coincidan con maxVotos
+          return ganadoras;
+     }
+
+     //Calculo el total de votos para poder calcular el porcentaje más tarde
+     function calcularTotalVotos() {
+          let total = 0;
+          const valores = Object.values(votos); //Con esta variable obtengo el número de votos.
+
+          for (let i = 0; i < valores.length; i++) { //Recorro el array de valores para ir sumando los votos.
+               total += valores[i];
+          }
+
+          return total;
+     } 
+
+     
+     //Esta función hace que se muestren los resultados para ver quién va ganando, permitiendo mostrar el porcentaje y resaltando a la canción ganadora.
+     function mostrarResultados(total, ganadoras) {
+          canciones.forEach(cancion => { 
+               let porcentaje;
+                    if (total > 0) {
+                         const votosCancion = votos[cancion]; //Variable que alberga el número de votos por canción.
+                         const fraccion = votosCancion / total; //Variable para poder calcular el porcentaje
+                         const porcentajeReal = fraccion * 100; //Variable para cacular el porcentaje
+                         porcentaje = porcentajeReal.toFixed(2); //.toFixed(2) hace que solo aparezcan dos decimales
+                    } else {
+                         porcentaje = 0;
+                    }
+               
+               //Actualizo el texto con el número de votos y el porcentaje.
+               textos[cancion].textContent = `${votos[cancion]} votos (${porcentaje}%)`;
+               
+               //De esta forma compruebo si la canción está en el array de "ganadoras" para poder marcarla como "ganadora".
+               if (ganadoras.includes(cancion)) {
+                    botones[cancion].classList.add("ganadora");
+               } else {
+                    botones[cancion].classList.remove("ganadora");
+               }
+          });
+          }
+
+          //Esta función llama a las funciones anteriores para actualizar los resultados.
+     function actualizarVista() {
+          const total = calcularTotalVotos();
+          const ganadoras = obtenerGanadora();
+          mostrarResultados(total, ganadoras);
+     }
+
+     //Esta función sirve para reiniciar los votos a 0.
+     function reiniciarVotos() {
+          for (let i = 0; i < canciones.length; i++) {
+               const cancion = canciones[i];
+               votos[cancion] = 0;
+          }
+
+          guardarYActualizar();
+     }
+
+
+          //Llamo a esta función para cargar los datos guardados al recargar el navegador.
+          actualizarVista();
+     </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+/* Fondo general claro con tipografía limpia */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-image: url("../imagenes/fondo.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fffcfc;
+  padding: 2rem;
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  color: #ffffff;
+}
+
+.cancion {
+  background-color: #ffffff;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.cancion:hover {
+  background-color: rgba(252, 205, 205, 0.339);
+  border-color: #999;
+  color: #f6f6f6;
+}
+
+.bloque p {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: #f6f6f6;
+}
+
+button[onclick="reiniciarVotos()"] {
+  background-color: #e63946;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  margin-top: 2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[onclick="reiniciarVotos()"]:hover {
+  background-color: #a81e2c;
+}
+
+.ganadora {
+  background-color: #2a9d8f !important;
+  color: white !important;
+  border-color: #21867a !important;
+  font-weight: bold;
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(42, 157, 143, 0.4);
+}
